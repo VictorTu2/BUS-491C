@@ -92,7 +92,6 @@ class Test_queues(TestCase):
         # test valid results with multiple classes
         self.assertAlmostEqual(.15238095238095242, q.calc_lq_mmc((10, 20, 10), 50, 2))
 
-
 if __name__ == '__main__':
     rslt = main(verbosity=2, exit=False)
 
