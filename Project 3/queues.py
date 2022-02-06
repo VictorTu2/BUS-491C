@@ -169,13 +169,3 @@ def calc_lq_mmc(lamda, mu: float, c: int = 1):
         lq = (p0 * num) / den
 
         return lq
-
-
-
-
-
-
-
-
-
-

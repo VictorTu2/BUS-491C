@@ -97,9 +97,3 @@ if __name__ == '__main__':
     rslt = main(verbosity=2, exit=False)
 
     print('done')
-
-
-
-
-
-
