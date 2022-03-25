@@ -1,6 +1,7 @@
 #%% fix
 import pandas as pd
 import numpy as np
+pd.options.mode.chained_assignment = None #for settingwithcopywarning
 #%%
 def bbanalyze():
     """
@@ -45,10 +46,16 @@ def bbanalyze():
     #revised baseball data set
     bb_comp = df.dropna()  #complete cases
 
-    obp = (bb_comp["h"] + bb_comp["bb"] + bb_comp["hbp"]) / (bb_comp["ab"] + bb_comp["bb"] + bb_comp["hbp"]) #creating obp column
+    obp_num = bb_comp["h"] + bb_comp["bb"] + bb_comp["hbp"]
+    obp_denom = bb_comp["ab"] + bb_comp["bb"] + bb_comp["hbp"]
+
+    obp = obp_num / obp_denom #creating obp column
     obp.name = "obp"
 
-    pab = (bb_comp["h"] + bb_comp["bb"] + bb_comp["hbp"] + bb_comp["sf"] + bb_comp["sh"]) / (bb_comp["ab"] + bb_comp["bb"] + bb_comp["hbp"] + bb_comp["sf"] + bb_comp["sh"]) #creating pab column
+    pab_num = bb_comp["h"] + bb_comp["bb"] + bb_comp["hbp"] + bb_comp["sf"] + bb_comp["sh"]
+    pab_denom = bb_comp["ab"] + bb_comp["bb"] + bb_comp["hbp"] + bb_comp["sf"] + bb_comp["sh"]
+
+    pab = pab_num / pab_denom #creating pab column
     pab.name = "pab"
 
     bb = pd.concat([bb_comp, obp, pab],axis=1) #revised baseball data set
@@ -68,7 +75,7 @@ def bbanalyze():
           "teams": dat_al["team"].nunique()} #count number of teams in dat_al df
 
     #creating the records dictionary:
-    bbrec = bb.loc[(bb["stint"] == 1) & (bb["ab"] >= 50)] #players with 50 or more at bats in a stint
+    bbrec = bb[(bb["stint"] == 1) & (bb["ab"] >= 50)] #players with 50 or more at bats in a stint
 
     def rec_ind(column_name):  # function- returns highest id
         rec_in = bbrec.groupby("id")[column_name].max().sort_values(ascending=False).index[0]
@@ -85,7 +92,7 @@ def bbanalyze():
                     bbrec["ab"] + bbrec["bb"] + bbrec["hbp"] + bbrec["sf"] + bbrec["sh"])
 
         return bbrec
-    def perab_ind_a(column_name):  # function- returns val of percentage of at plate appearances
+    def perab_ind_a(column_name):  # function- returns index of percentage of at plate appearances
         new_col_a(column_name)
 
         perab_ind = bbrec.groupby("id")[column_name].max().sort_values(ascending=False).index[0]
@@ -102,7 +109,7 @@ def bbanalyze():
 
         return bbrec
 
-    def perab_ind_p(column_name):  # function- returns val of percentage of at bats values
+    def perab_ind_p(column_name):  # function- returns index of percentage of at bats values
         new_col_p(column_name)
 
         perab_ind = bbrec.groupby("id")[column_name].max().sort_values(ascending=False).index[0]
