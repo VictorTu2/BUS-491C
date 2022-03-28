@@ -1,9 +1,8 @@
-#%% fix
+#%%
 import pandas as pd
 import numpy as np
-pd.options.mode.chained_assignment = None #for settingwithcopywarning
 #%%
-def bbanalyze():
+def bbanalyze(dataframe = "baseball.csv"):
     """
     :return: constructs and returns a dictionary with the following cells:
              -record.count
@@ -20,13 +19,14 @@ def bbanalyze():
     """
 
     #read csv file into python using pandas
-    df = pd.read_csv("baseball.csv")
+    df = pd.read_csv(dataframe)
 
     #finding count of number of records in dataset
     record_count = len(df) # number of records in dataset = number of rows in the dataset
 
     #finding complete cases (no NANs)
-    complete_cases = len(df.dropna()) #drops all rows with nan values, takes length of that
+    bb = df.dropna()
+    complete_cases = len(bb) #drops all rows with nan values, takes length of that
 
     #tuple of year (min, max)
     min_year = df["year"].min() #finding min value
@@ -43,7 +43,7 @@ def bbanalyze():
     #league_count
     league_count = df["lg"].nunique() #counts number of unique league values
 
-    #revised baseball data set
+    #revised baseball data set (checking for valid dataframe and dropping NaNs)
     bb_comp = df.dropna()  #complete cases
 
     obp_num = bb_comp["h"] + bb_comp["bb"] + bb_comp["hbp"]
@@ -75,7 +75,7 @@ def bbanalyze():
           "teams": dat_al["team"].nunique()} #count number of teams in dat_al df
 
     #creating the records dictionary:
-    bbrec = bb[(bb["stint"] == 1) & (bb["ab"] >= 50)] #players with 50 or more at bats in a stint
+    bbrec = bb[(bb["ab"] >= 50) & (bb["stint"] == 1)] #players with 50 or more at bats in a stint
 
     def rec_ind(column_name):  # function- returns highest id
         rec_in = bbrec.groupby("id")[column_name].max().sort_values(ascending=False).index[0]
