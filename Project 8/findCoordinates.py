@@ -1,8 +1,7 @@
-#%%
 import pandas as pd
 import requests
 import math
-#%%
+
 def findCoordinates(address: list, key = None):
     """
     :param address: list of addresses
